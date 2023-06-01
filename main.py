@@ -20,3 +20,6 @@ from tensorflow.keras.layers import Dense, Dropout, BatchNormalization, Input, F
 
 # Supress info, warnings and error messages
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+from google.colab import drive
+drive.mount('/content/drive')
