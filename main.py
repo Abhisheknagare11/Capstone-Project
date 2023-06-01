@@ -99,3 +99,51 @@ print(f'X_train:', X_train.shape)
 print(f'X_val:', X_val.shape)
 print(f'Y_train:', Y_train.shape)
 print(f'Y_val:', Y_val.shape)
+
+# Architectural function for Resnet50
+def build_resnet50(IMAGE_SIZE, channels):
+
+    resnet50 = ResNet50(weights = 'imagenet', include_top = False)
+
+    input = Input(shape = (IMAGE_SIZE, IMAGE_SIZE, channels))
+    x = Conv2D(3, (3, 3), padding = 'same')(input)
+    x = resnet50(x)
+    x = GlobalAveragePooling2D()(x)
+    x = BatchNormalization()(x)
+    x = Dense(64, activation = 'relu')(x)
+    x = BatchNormalization()(x)
+    
+    output = Dense(2, activation = 'softmax')(x)
+ 
+    # model
+    model = Model(input, output)
+    
+    optimizer = Adam(learning_rate = 0.003, beta_1 = 0.9, beta_2 = 0.999, epsilon = 0.1, decay = 0.0)
+    model.compile(loss = 'categorical_crossentropy',  # minimize the negative multinomial log-likelihood also known as the cross-entropy.
+                  optimizer = optimizer,
+                  metrics = ['accuracy'])
+    model.summary()
+    
+    return model
+channels = 3
+
+model = build_resnet50(IMAGE_SIZE, channels)
+annealer = ReduceLROnPlateau(monitor = 'val_accuracy',  # Reduce learning rate when Validation accuracy remains constant
+                             factor = 0.70,  # Rate by which the learning rate will decrease
+                             patience = 5,   # number of epochs without improvement, after which the learning rate will decrease
+                             verbose = 1,    # Display messages
+                             min_lr = 1e-4   # lower limit on the learning rate.
+                            )
+checkpoint = ModelCheckpoint('model.h5', verbose = 1, save_best_only = True)  # Save neural network weights
+
+# Generates batches of image data with data augmentation
+datagen = ImageDataGenerator(rotation_range = 360, # Degree range for random rotations
+                        width_shift_range = 0.2,   # Range for random horizontal shifts
+                        height_shift_range = 0.2,  # Range for random vertical shifts
+                        zoom_range = 0.2,          # Range for random zoom
+                        horizontal_flip = True,    # Randomly flip inputs horizontally
+                        vertical_flip = True)      # Randomly flip inputs vertically
+
+datagen.fit(X_train)
+
+plot_model(model, to_file = 'convnet.png', show_shapes = True, show_layer_names = True)
