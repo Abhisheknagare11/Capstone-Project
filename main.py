@@ -75,4 +75,18 @@ def read_image(filepath):
 def resize_image(image, image_size):
     return cv2.resize(image.copy(), image_size, interpolation = cv2.INTER_AREA)
 
+X_train = np.zeros((train.shape[0], IMAGE_SIZE, IMAGE_SIZE, 3))
+
+for i, file in enumerate(train['File'].values):
+    image = read_image(file)
+    if image is not None:
+        X_train[i] = resize_image(image, (IMAGE_SIZE, IMAGE_SIZE))
+
+X_Train = X_train / 255.0   # Pixel normalization
+print('Train Shape:', X_Train.shape)
+
+Y_train = to_categorical(train['ID'].values, num_classes = 2)
+
+print(Y_train)
+
 
