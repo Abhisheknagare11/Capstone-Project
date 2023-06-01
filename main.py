@@ -23,3 +23,16 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 from google.colab import drive
 drive.mount('/content/drive')
+
+disease_types = ['COVID', 'non-COVID']
+
+train_dir = data_dir = '/content/drive/MyDrive/CT scan'
+
+train_data = []
+
+for index, sp in enumerate(disease_types):
+    for file in os.listdir(os.path.join(train_dir, sp)):
+        train_data.append([sp + "/" + file, index, sp])
+        
+train = pd.DataFrame(train_data, columns = ['File', 'ID','Disease Type'])
+train
