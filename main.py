@@ -158,3 +158,40 @@ hist = model.fit(datagen.flow(X_train, Y_train, batch_size = BATCH_SIZE),
                verbose = 1,
                callbacks = [annealer, checkpoint],
                validation_data = (X_val, Y_val))
+
+Y_pred = model.predict(X_val)
+
+Y_pred = np.argmax(Y_pred, axis = 1)
+Y_true = np.argmax(Y_val, axis = 1)
+
+cm = confusion_matrix(Y_true, Y_pred)
+plt.figure(figsize = (12, 12))
+ax = sns.heatmap(cm, cmap = plt.cm.Greens, annot = True, square = True, xticklabels = disease_types, yticklabels = disease_types)
+ax.set_ylabel('Actual', fontsize = 40)
+ax.set_xlabel('Predicted', fontsize = 40)
+
+
+TP = cm[1][1]
+print(f"True Positive: {TP}")
+
+
+FN = cm[1][0]
+print(f"False Negative: {FN}")
+
+TN = cm[0][0]
+print(f"True Negative: {TN}")
+
+FP = cm[0][1]
+print(f"False Positive: {FP}")
+
+# Sensitivity, recall, or true positive rate
+print(f"True Positive Rate: {TP / (TP + FN)}")
+
+# Specificity or true negative rate
+print(f"True Negative Rate: {TN / (TN + FP)}\n")
+
+final_loss, final_accuracy = model.evaluate(X_val, Y_val)
+print(f"\nFinal Loss: {final_loss}, Final Accuracy: {final_accuracy}")
+
+
+
