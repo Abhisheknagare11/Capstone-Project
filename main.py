@@ -147,3 +147,14 @@ datagen = ImageDataGenerator(rotation_range = 360, # Degree range for random rot
 datagen.fit(X_train)
 
 plot_model(model, to_file = 'convnet.png', show_shapes = True, show_layer_names = True)
+
+BATCH_SIZE = 32
+EPOCHS = 50
+
+# Fit of the model that includes the augmented images in terms of their characteristics
+hist = model.fit(datagen.flow(X_train, Y_train, batch_size = BATCH_SIZE),
+               steps_per_epoch = X_train.shape[0] // BATCH_SIZE,
+               epochs = EPOCHS,
+               verbose = 1,
+               callbacks = [annealer, checkpoint],
+               validation_data = (X_val, Y_val))
