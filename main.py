@@ -37,3 +37,12 @@ for index, sp in enumerate(disease_types):
 train = pd.DataFrame(train_data, columns = ['File', 'ID','Disease Type'])
 train
 
+Seed = 40
+
+train = train.sample(frac = 1, replace=False, random_state = Seed)
+
+# Reset indices (row numbers)
+train = train.reset_index(drop = True)
+
+sns.countplot(x = "ID", data = train).set_title("Frequency Histogram (0: COVID, 1:Non-COVID)")
+train
