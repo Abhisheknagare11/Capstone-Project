@@ -211,4 +211,23 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc = 'upper left')
 plt.show()
 
+from keras.preprocessing import image
+
+img = image.load_img('/content/drive/MyDrive/CT scan/COVID/Covid (1007).png', grayscale = False, target_size = (224, 224))
+show_img = image.load_img('/content/drive/MyDrive/CT scan/COVID/Covid (1007).png', grayscale = False, target_size = (200, 200))
+disease_class = ['Covid-19','Non Covid-19']
+x = image.img_to_array(img)
+x = np.expand_dims(x, axis = 0)
+x /= 255
+
+custom = model.predict(x)
+print(custom[0])
+
+plt.imshow(show_img)
+plt.show()
+
+a = custom[0]
+ind = np.argmax(a)
+        
+print('Prediction:',disease_class[ind])
 
