@@ -89,4 +89,13 @@ Y_train = to_categorical(train['ID'].values, num_classes = 2)
 
 print(Y_train)
 
+# Dataframe split to train and validation set (80% train and 20% validation)
+X_train, X_val, Y_train, Y_val = train_test_split(X_Train,
+                                                  Y_train,
+                                                  test_size = 0.2, # Percent 20% of the data is using as test set
+                                                  random_state = Seed)
 
+print(f'X_train:', X_train.shape)
+print(f'X_val:', X_val.shape)
+print(f'Y_train:', Y_train.shape)
+print(f'Y_val:', Y_val.shape)
