@@ -36,3 +36,4 @@ for index, sp in enumerate(disease_types):
         
 train = pd.DataFrame(train_data, columns = ['File', 'ID','Disease Type'])
 train
+
