@@ -193,5 +193,22 @@ print(f"True Negative Rate: {TN / (TN + FP)}\n")
 final_loss, final_accuracy = model.evaluate(X_val, Y_val)
 print(f"\nFinal Loss: {final_loss}, Final Accuracy: {final_accuracy}")
 
+# Accuracy plot 
+plt.plot(hist.history['accuracy'])
+plt.plot(hist.history['val_accuracy'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc = 'upper left')
+plt.show()
+
+# Loss plot
+plt.plot(hist.history['loss'])
+plt.plot(hist.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc = 'upper left')
+plt.show()
 
 
